@@ -26,7 +26,7 @@ float train[][2] = {
 
 
 
-#define MAX 30
+int MAX;
 
 #define COUNT sizeof(train)/sizeof(train[0])
 
@@ -69,6 +69,7 @@ double* gradiant(double w, double b)
 
 int main()
 {
+    MAX = 30;
     srand(10);
     double w = (rand()/RAND_MAX);
     double b = (rand()/RAND_MAX);
