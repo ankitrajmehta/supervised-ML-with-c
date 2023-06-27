@@ -64,6 +64,7 @@ int main()
     for (int i = 0; i < epoch; i++)
     {
         float acc = cost(w,b);
+<<<<<<< HEAD
         double dw = (cost(w + h, b) - acc);
         double db = (cost(w , b+h) - acc);
 
@@ -86,3 +87,13 @@ int main()
 }
 
 
+=======
+        float dw = (cost(w + h, b) - acc);
+        float db = (cost(w , b+h) - acc);
+        
+        w -= dw;
+        b -= db;
+    }
+        printf("w = %f, b = %f \n", w, b);
+}
+>>>>>>> 1ca257d1d429340a6403eb90a039ec20c825b0cd
