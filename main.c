@@ -37,7 +37,7 @@ int main()
     for (int i = 0; i < epoch; i++)
     {
         float acc = cost(w,b);
-        float dw = (cost(w + h, b) - acc)/h;
+        float dw = (cost(w + h, b) - acc);
         float db = (cost(w , b+h) - acc);
         
         w -= dw;
