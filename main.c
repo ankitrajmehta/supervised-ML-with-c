@@ -1,17 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-float train[9][2] = {
-    {0,0},
-    {1,2},
-    {2,4},
-    {3,6},
-    {4,8},
-    {6,12},
-    {7,14},
-    {20,40},
-    {400,800}
+float train[][2] = {
+    {2.4, 1.2},
+    {4.8, 2.4},
+    {6.2, 3.1},
+    {8.0, 4.0},
+    {9.0, 4.5},
+    {10.4, 5.2},
+    {12.0, 6.0},
+    {13.6, 6.8},
+    {14.2, 7.1},
+    {16.0, 8.0},
+    {17.0, 8.5},
+    {18.4, 9.2},
+    {20.2, 10.1},
+    {21.8, 10.9},
+    {23.0, 11.5},
+    {24.4, 12.2},
+    {25.6, 12.8},
+    {27.4, 13.7},
+    {28.8, 14.4},
+    {30.0, 15.0}
 };
+
+
+
+#define MAX 30
 
 #define COUNT sizeof(train)/sizeof(train[0])
 
@@ -28,7 +43,7 @@ float train[9][2] = {
     return tmp;
 }*/
 
-double* gradiant(float w, float b)
+double* gradiant(double w, double b)
 {
     double dw = 0;
     double db = 0;
@@ -36,8 +51,8 @@ double* gradiant(float w, float b)
 
     for (int i =0; i < COUNT; i++)
     {
-        float x = train[i][0];
-        float y = train[i][1];
+        double x = (train[i][0]/MAX);
+        double y = (train[i][1]/MAX);
         double y_p = w * x  + b;
         double dj_dw_i = (y_p - y) * x;
         double dj_db_i = y_p - y;
@@ -45,20 +60,21 @@ double* gradiant(float w, float b)
         dw+= dj_dw_i;
         db+=dj_db_i;
     }
-    tmp[0] = dw/COUNT;
-    tmp[1] = db/COUNT;
+    tmp[0] = dw*MAX/COUNT; //dw
+    tmp[1] = db*MAX/COUNT; //dw
 
     return tmp;
 }
 
+
 int main()
 {
     srand(10);
-    float w = (rand()/RAND_MAX);
-    float b = (rand()/RAND_MAX);
-    int epoch = 90000;
+    double w = (rand()/RAND_MAX);
+    double b = (rand()/RAND_MAX);
+    int epoch = 1000000;
     //double h = 1e-5;
-    double rate = 1e-3;
+    double rate = 1e-2;
 
     /*
     for (int i = 0; i < epoch; i++)
@@ -77,10 +93,12 @@ int main()
     for (int i = 0; i < epoch; i++)
     {
         double* tmp = gradiant(w,b);
-        w -= tmp[0]; //tmp[0] is dw
-        b -= tmp[1]; //tmp[0] is db
+        w -= tmp[0] ; //tmp[0] is dw
+        b -= tmp[1] ; //tmp[0] is db
+        free(tmp);  
     }
 
-    printf("w = %f, b = %f \n", w, b);
-    printf("y p = %f", w*6+ b);
+    printf("w = %lf, b = %lf \n", w, b);
+    printf("y p = %lf", w*20+ b);
+
 }
