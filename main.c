@@ -59,6 +59,7 @@ int main()
     int epoch = 90000;
     //double h = 1e-5;
     double rate = 1e-3;
+    
     /*
     for (int i = 0; i < epoch; i++)
     {
