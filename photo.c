@@ -10,15 +10,15 @@ void apply(int height, int width, Pixel* pixels,float w_blue, float b_blue,float
     {
         for (int j = 0; j < width; j++)
         {
-            pixels[i * width + j].blue = pixels[i * width + j].blue* w_blue + b_blue;
-            pixels[i * width + j].red = pixels[i * width + j].red * w_red + b_red;
-            pixels[i * width + j].green =  pixels[i * width + j].green * w_green + b_green;
-            pixels[i * width + j].blue = fmin(pixels[i * width + j].blue, 255);
-            pixels[i * width + j].blue = fmax(pixels[i * width + j].blue, 0);
-            pixels[i * width + j].red = fmax(pixels[i * width + j].red,0);
-            pixels[i * width + j].red = fmin(pixels[i * width + j].red,255);
-            pixels[i * width + j].green =fmax(pixels[i * width + j].green,0);
-            pixels[i * width + j].green =fmin(pixels[i * width + j].green,255);
+            int blue = ceil(pixels[i * width + j].blue* w_blue + b_blue);
+            int red = ceil(pixels[i * width + j].red * w_red + b_red);
+            int green =  ceil(pixels[i * width + j].green * w_green + b_green);
+            blue = fmin(blue ,255);
+            pixels[i * width + j].blue = fmax(blue, 0);
+            red = fmin(red,255);
+            pixels[i * width + j].red = fmax(red,0);
+            green =fmin(green,255);
+            pixels[i * width + j].green =fmax(green,0);
 
         }
     }
@@ -38,7 +38,7 @@ int main()
     char *infile = "aaa.bmp";
     char *outfile = "om.bmp";
     char *label_file="blue.bmp";
-    char *to_edit="tower.bmp";
+    char *to_edit="aaa.bmp";
 
     int width, height;
     Pixel* x_pixels = readBMP(infile, &width, &height); // Updated function call
