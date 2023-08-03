@@ -5,8 +5,8 @@
 
 
 int p = 0;
-//double min[13]={0.006320,0.000000,0.460000,0.000000,0.385000,3.561000,2.900000,1.129600,1.000000,187.000000,12.600000,0.320000,1.730000};
-//double max[13]={88.976200,100.000000, 27.740000,1.000000,0.871000,8.780000,100.000000,12.126500,24.000000,711.000000,22.000000,396.900000,37.970000};
+double min[13]={0.006320,0.000000,0.460000,0.000000,0.385000,3.561000,2.900000,1.129600,1.000000,187.000000,12.600000,0.320000,1.730000};
+double max[13]={88.976200,100.000000, 27.740000,1.000000,0.871000,8.780000,100.000000,12.126500,24.000000,711.000000,22.000000,396.900000,37.970000};
 
 
 int count;
@@ -103,7 +103,7 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
         y_p = fmax(y_p, range_min);
         for ( int k =0; k<x_vals; k++)
         {
-            dw[k]+= (y_p - y) * (x[k])/255;//(max[k]*0);
+            dw[k]+= (y_p - y) * (x[k])/1; //(max[k]);
 
         }
         db+= y_p - y;
@@ -117,7 +117,6 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
     if (p%10000 == 0 || p == 1 )
     {
         printf("Epoch: %d\n", p);
-        printf("%lf--- |||", y-y_p);
         printf("%lf \n",acc(count,max_cols,w,b,train));
     }
 
@@ -132,10 +131,10 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols])
     double w[max_cols];
     for (int i=0; i < max_cols;i++)
     {
-        w[i] = 5 + 0*(rand()/RAND_MAX)/2;
+        w[i] = 0*(rand()/RAND_MAX)/2;
     }
     double b = 0;
-    int epoch = 300;
+    int epoch = 400;
     //double h = 1e-5;
     double rate = 1e-4;
     double range_max=255;
