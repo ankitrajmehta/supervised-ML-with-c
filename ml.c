@@ -10,7 +10,7 @@ double max[13]={88.976200,100.000000, 27.740000,1.000000,0.871000,8.780000,100.0
 
 
 int count;
-
+ 
 double cost(int c,int max_cols, double w[max_cols-1], float b, float test[c][max_cols])
 {
     int x_vals = max_cols-1;
@@ -53,7 +53,7 @@ double acc(int c,int max_cols,double w[max_cols - 1], float b, float test[c][max
 {
     int x_vals = max_cols-1;
     double result = 0, y_p=0,t;
-    for (int i = 0; i < c; i++)
+    for (int i = 0; i < c ; i++)
     {
         y_p=0;
         for (int j=0; j<x_vals;j++)
@@ -99,11 +99,11 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
 
 
        // printf("%lf\n", y-y_p);
-        y_p = fmin(y_p, range_max);
-        y_p = fmax(y_p, range_min);
+        //y_p = fmin(y_p, range_max);
+        //y_p = fmax(y_p, range_min);
         for ( int k =0; k<x_vals; k++)
         {
-            dw[k]+= (y_p - y) * (x[k])/1; //(max[k]);
+            dw[k]+= (y_p - y) * (x[k])/255; //(max[k]);
 
         }
         db+= y_p - y;
@@ -117,7 +117,7 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
     if (p%10000 == 0 || p == 1 )
     {
         printf("Epoch: %d\n", p);
-        printf("%lf \n",acc(count,max_cols,w,b,train));
+        printf("%lf \n",rmse(count,max_cols,w,b,train));
     }
 
 
@@ -134,9 +134,9 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols])
         w[i] = 0*(rand()/RAND_MAX)/2;
     }
     double b = 0;
-    int epoch = 400;
+    int epoch = 10000000;
     //double h = 1e-5;
-    double rate = 1e-4;
+    double rate = 1e-6;
     double range_max=255;
     double range_min =0;
 /*    
