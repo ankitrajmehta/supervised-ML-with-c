@@ -74,9 +74,16 @@ int main()
 
 
     float *wb = (float*)malloc(max_cols*sizeof(int));
+    int epoch=10000000;
+    
+    double rate=1e-4;
+    double range_max=100000000000;
+    double range_min=0 ;
+    
 
 
-    wb = linear_regression_model(c,max_cols, train);
+    wb = linear_regression_model(c,max_cols, train,epoch,rate ,range_max,
+    range_min);
 
 
     for (int l = 0; l< max_cols-1; l++)

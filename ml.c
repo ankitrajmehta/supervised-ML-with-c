@@ -5,8 +5,8 @@
 
 
 int p = 0;
-double min[13]={0.006320,0.000000,0.460000,0.000000,0.385000,3.561000,2.900000,1.129600,1.000000,187.000000,12.600000,0.320000,1.730000};
-double max[13]={88.976200,100.000000, 27.740000,1.000000,0.871000,8.780000,100.000000,12.126500,24.000000,711.000000,22.000000,396.900000,37.970000};
+
+
 
 
 int count;
@@ -68,7 +68,7 @@ double acc(int c,int max_cols,double w[max_cols - 1], float b, float test[c][max
     return (100-tmp*100);
 }
 
-void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double range_max, double range_min, float train[count][max_cols])
+void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double range_max, double range_min, float train[count][max_cols],double max[max_cols-1])
 {
     int c = count;
     int x_vals = max_cols-1;
@@ -103,7 +103,7 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
         y_p = fmax(y_p, range_min);
         for ( int k =0; k<x_vals; k++)
         {
-            dw[k]+= (y_p - y) * (x[k])/1; //(max[k]);
+            dw[k]+= (y_p - y) * (x[k])/max[k]; //(max[k]);
 
         }
         db+= y_p - y;
@@ -117,14 +117,67 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
     if (p%10000 == 0 || p == 1 )
     {
         printf("Epoch: %d\n", p);
-        printf("%lf \n",acc(count,max_cols,w,b,train));
+        printf("%lf \n",rmse(count,max_cols,w,b,train));
     }
 
 
 }
 
 
-float* linear_regression_model(int c,int max_cols, float train[c][max_cols])
+  
+void max_find(int TRAIN_ROWS ,int n,float train[TRAIN_ROWS][n],double max[n])
+{
+    
+    for (int i =0; i < n;i++)
+    {
+        max[i]=train[0][i];
+        
+    }
+    
+    for (int i =0; i < n;i++)
+    {
+        
+
+            for (int j =0; j < TRAIN_ROWS; j++)
+            {
+                if (max[i] < train[j][i])
+                {
+                    max[i] = train[j][i];
+                    
+                }
+
+            } 
+            
+            
+        }
+    }
+void min_find(int TRAIN_ROWS ,int n,float train[TRAIN_ROWS][n],double min[n])
+{
+    
+    for (int i =0; i < n;i++)
+    {
+        min[i]=train[0][i];
+        
+    }
+    
+    for (int i =0; i < n;i++)
+    {
+        
+
+            for (int j =0; j < TRAIN_ROWS; j++)
+            {
+                if (min[i] > train[j][i])
+                {
+                    min[i] = train[j][i];
+                    
+                }
+            } 
+            
+        }
+    }
+
+float* linear_regression_model(int c,int max_cols, float train[c][max_cols],int epoch,double rate ,double range_max,
+    double range_min )
 {
     count = c;
     srand(10);    
@@ -134,11 +187,11 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols])
         w[i] = 0*(rand()/RAND_MAX)/2;
     }
     double b = 0;
-    int epoch = 400;
-    //double h = 1e-5;
-    double rate = 1e-4;
-    double range_max=255;
-    double range_min =0;
+    
+    double max[max_cols];
+    
+
+
 /*    
     for (int i = 0; i < epoch; i++)
     {
@@ -150,11 +203,13 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols])
         b -= db;
     }
 */    
+min_find( c, max_cols,train,max);
+max_find( c, max_cols,train,max);
 
 p=0;
     for (int i = 0; i < epoch; i++)
     {
-        gradiant( max_cols,w,b,rate,range_max,range_min, train);
+        gradiant( max_cols,w,b,rate,range_max,range_min, train,max);
     }
 
     float *wb = (float*)malloc(max_cols*sizeof(int));
