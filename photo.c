@@ -65,7 +65,7 @@ int main()
     }
 
 
-    float* wb = linear_regression_model(c,2,train);
+    float* wb = linear_regression_model(c,2,train,400,1e-2,255,0);
     float w_blue = wb[0];
     float b_blue=wb[1];
     free(wb);
@@ -83,7 +83,7 @@ int main()
         }
     }
 
-    float* wr = linear_regression_model(c,2,train);
+    float* wr = linear_regression_model(c,2,train,400,1e-2,255,0);
     float w_red = wr[0];
     float b_red=wr[1];
     free(wr);
@@ -102,7 +102,7 @@ int main()
     }
 
 
-    float* wg = linear_regression_model(c,2,train);
+    float* wg = linear_regression_model(c,2,train,400,1e-2,255,0);
     float w_green = wg[0];
     float b_green=wg[1];
     free(wg);
