@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <time.h>
 #include "ml.h"
 
 #define TRAIN_ROWS 456    // Maximum number of rows in the CSV file
@@ -73,15 +72,13 @@ int main()
     int max_cols = MAX_COLS;
 
 
-    float *wb = (float*)malloc(max_cols*sizeof(int));
-    int epoch=10000000;
-    
+    int epoch=1000000;
     double rate=1e-4;
     double range_max=100000000000;
     double range_min=0 ;
     
 
-
+    float *wb = (float*)malloc(max_cols*sizeof(int));
     wb = linear_regression_model(c,max_cols, train,epoch,rate ,range_max,
     range_min);
 
@@ -92,11 +89,18 @@ int main()
     }
     b = wb[max_cols-1];
 
-    // for (int l = 0; l<13; l++)
-    // {
-    // printf("w%i = %lf \n",l, w[l]);
-    // }
-    // printf("b = %lf \n", b);
+    printf("%lf\n", acc(TEST_ROWS,max_cols,w,b,test));
+
+    
+for(int k=0; k<=TEST_ROWS; k++)
+   { float resultant=0.0;
+    for (int l = 0; l<MAX_COLS; l++)
+    {
+    resultant += w[l]*test[k][l];
+    }
+    resultant+=b;
+
+    printf("result for %d = %lf \n",k, resultant);}
 
     
 

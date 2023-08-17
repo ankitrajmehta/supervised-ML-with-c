@@ -7,7 +7,7 @@
 #include "opener.h"
 
 Pixel* readBMP(const char* filename, int* width, int* height) {
-    int channels; // Will store the number of color channels in the image (3 for RGB)
+    int channels; //channels in the image (3 for RGB)
     uint8_t* pixels = stbi_load(filename, width, height, &channels, 3);
 
     if (!pixels) {
@@ -15,14 +15,8 @@ Pixel* readBMP(const char* filename, int* width, int* height) {
         return NULL;
     }
 
-    // Allocate memory for the pixel data
     int numPixels = (*width) * (*height);
     Pixel* pixelData = (Pixel*)malloc(numPixels * sizeof(Pixel));
-    if (!pixelData) {
-        printf("Error: Memory allocation failed.\n");
-        stbi_image_free(pixels);
-        return NULL;
-    }
 
     // Copy pixel data from stb_image's RGB format (3 bytes per pixel) to our Pixel struct
     for (int i = 0; i < numPixels; i++) {
@@ -31,7 +25,6 @@ Pixel* readBMP(const char* filename, int* width, int* height) {
         pixelData[i].blue = pixels[i * 3 + 2];
     }
 
-    // Free stb_image's pixel data as it is no longer needed
     stbi_image_free(pixels);
 
     return pixelData;
@@ -41,11 +34,7 @@ Pixel* readBMP(const char* filename, int* width, int* height) {
 void writeBMP(const char* filename, int width, int height, Pixel* pixels) {
     // Convert the Pixel array back to the format required by stb_image_write
     uint8_t* pixelData = (uint8_t*)malloc(width * height * 3 * sizeof(uint8_t));
-    if (!pixelData) {
-        printf("Error: Memory allocation failed.\n");
-        return;
-    }
-
+    
     for (int i = 0; i < width * height; i++) {
         pixelData[i * 3 + 0] = pixels[i].red;
         pixelData[i * 3 + 1] = pixels[i].green;

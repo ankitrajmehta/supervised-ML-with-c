@@ -36,9 +36,9 @@ int main()
     
     // Remember filenames
     char *infile = "aaa.bmp";
-    char *outfile = "om.bmp";
     char *label_file="blue.bmp";
     char *to_edit="aaa.bmp";
+    char *outfile = "om.bmp";
 
     int width, height;
     Pixel* x_pixels = readBMP(infile, &width, &height); // Updated function call
@@ -65,7 +65,11 @@ int main()
     }
 
 
+
+
+
     float* wb = linear_regression_model(c,2,train,400,1e-2,255,0);
+
     float w_blue = wb[0];
     float b_blue=wb[1];
     free(wb);

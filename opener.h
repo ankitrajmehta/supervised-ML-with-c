@@ -1,5 +1,3 @@
-#ifndef OPENER_H
-#define OPENER_H
 
 #include <stdint.h> 
 
@@ -12,5 +10,3 @@ typedef struct {
 Pixel* readBMP(const char* filename, int* width, int* height);
 
 void writeBMP(const char* filename, int width, int height, Pixel* pixels);
-
-#endif // OPENER_H

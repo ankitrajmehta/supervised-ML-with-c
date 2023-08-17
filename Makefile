@@ -22,20 +22,43 @@
 
 ##make file for kisi
 
+# CC = gcc
+# CFLAGS = -Wall -Wextra -g
+# FRAMEWORKS = -framework SDL2 -framework SDL2_ttf
+# INCLUDE_DIRS = -I/home/ankit/Desktop/graphing/SDL2.framework/Headers -I/home/ankit/Desktop/graphing/SDL2_ttf.framework/Headers
+# FRAMEWORK_DIRS = -F/Library/Frameworks
+
+# SRC_FILES = opener.c photo.c ml.c
+# OBJ_FILES = $(SRC_FILES:.c=.o)
+# EXECUTABLE = run
+
+# all: $(EXECUTABLE)
+
+# $(EXECUTABLE): $(OBJ_FILES)
+# 	$(CC) $(FRAMEWORKS) $(FRAMEWORK_DIRS) $(OBJ_FILES) -o $(EXECUTABLE)
+
+# %.o: %.c
+# 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@
+
+# clean:
+# 	rm -f $(OBJ_FILES) $(EXECUTABLE)
+
+
+
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-FRAMEWORKS = -framework SDL2 -framework SDL2_ttf
-INCLUDE_DIRS = -I/Users/ankitkisi/Desktop/supervised-ML-with-c/SDL2.framework/Headers -I/Users/ankitkisi/Desktop/supervised-ML-with-c/SDL2_ttf.framework/Headers
-FRAMEWORK_DIRS = -F/Library/Frameworks
+LIBS = -lSDL2_ttf -lSDL2 -lm
+INCLUDE_DIRS = -I/home/ankit/Desktop/graphing/SDL2.framework/Headers -I/home/ankit/Desktop/graphing/SDL2_ttf.framework/Headers
+LIB_DIRS = -L/home/ankit/Desktop/graphing/SDL2.framework -L/home/ankit/Desktop/graphing/SDL2_ttf.framework
 
-SRC_FILES = opener.c photo.c ml.c
+SRC_FILES =  main.c ml.c
 OBJ_FILES = $(SRC_FILES:.c=.o)
 EXECUTABLE = run
 
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJ_FILES)
-	$(CC) $(FRAMEWORKS) $(FRAMEWORK_DIRS) $(OBJ_FILES) -o $(EXECUTABLE)
+	$(CC) $(OBJ_FILES) $(LIBS) $(LIB_DIRS) -o $(EXECUTABLE)
 
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDE_DIRS) -c $< -o $@

@@ -3,8 +3,8 @@
 #include <math.h>
 
 //graph header files
-#include <SDL2/SDL.h>
-#include <SDL_ttf.h>
+#include </home/ankit/Desktop/graphing/SDL2_ttf.framework/Headers/SDL_ttf.h>
+#include </home/ankit/Desktop/graphing/SDL2.framework/Headers/SDL2/SDL.h>
 
 //graph
 // Screen dimensions
@@ -14,8 +14,8 @@ const int SCREEN_HEIGHT = 800;
 // Graph dimensions and parameters
 const int GRAPH_WIDTH = 1000;
 const int GRAPH_HEIGHT = 500;
-const int GRAPH_X = 60;//(SCREEN_WIDTH - GRAPH_WIDTH) / 2;
-const int GRAPH_Y = 700; //(SCREEN_HEIGHT - GRAPH_HEIGHT) / 0.2;
+const int GRAPH_X = 20+(SCREEN_WIDTH - GRAPH_WIDTH) / 2;
+const int GRAPH_Y = 2*(SCREEN_HEIGHT - GRAPH_HEIGHT);
 const int NUM_VALUES = GRAPH_WIDTH; // Number of values to display
 const double SCALE_X = 0.9; // X-axis scaling factor
 const double SCALE_Y = 20; // Y-axis scaling factor
@@ -130,15 +130,6 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
     for (int i = 0; i<max_cols -1 ; i++){
         w[i] -= (dw[i]/count)*rate; //dw
     }
-
-    p++;
-    if (p%10000 == 0 || p == 1 )
-    {
-        printf("Epoch: %d\n", p);
-        printf("%lf \n",rmse(count,max_cols,w,b,train));
-    }
-
-
 }
 
 void drawgraph(double values[NUM_VALUES], int p, SDL_Window* window, SDL_Renderer* renderer ){
@@ -166,7 +157,7 @@ void drawgraph(double values[NUM_VALUES], int p, SDL_Window* window, SDL_Rendere
 
         char epochText[20];
         char costText[20];
-        snprintf(epochText, sizeof(epochText), "Epoch: %d", p);
+        snprintf(epochText, sizeof(epochText), "Epoch:%d",p);
         snprintf(costText, sizeof(costText), "Cost: %lf", values[currentX - 1]);
 
         SDL_Color textColor = {0, 0, 0, 255};
@@ -192,7 +183,7 @@ void drawgraph(double values[NUM_VALUES], int p, SDL_Window* window, SDL_Rendere
         int costWidth, costHeight;
         SDL_QueryTexture(costTexture, NULL, NULL, &costWidth, &costHeight);
 
-        SDL_Rect epochRect = {SCREEN_WIDTH / 2 - epochWidth / 2, 700, epochWidth, epochHeight};
+        SDL_Rect epochRect = {SCREEN_WIDTH / 2 - epochWidth / 2, 610, epochWidth, epochHeight};
         SDL_Rect costRect = {140 / 2, 30 + epochHeight, costWidth, costHeight};
 
         SDL_RenderCopy(renderer, epochTexture, NULL, &epochRect);
@@ -274,7 +265,14 @@ void min_find(int TRAIN_ROWS ,int n,float train[TRAIN_ROWS][n],double min[n])
 float* linear_regression_model(int c,int max_cols, float train[c][max_cols],int epoch,double rate ,double range_max,
     double range_min )
 {
-    
+    p=0;
+    int plot_speed =epoch / 100000;
+    if (plot_speed<1)
+    {
+        plot_speed=1;
+    }
+
+
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -303,7 +301,7 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols],int 
         SDL_Quit();
         
     }
-    double values[NUM_VALUES] = {0.0};
+    double values[NUM_VALUES];
 
     //ML code
     count = c;
@@ -317,6 +315,7 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols],int 
     
     
     double max[max_cols];
+    double initial_cost=rmse(count,max_cols,w,b,train);
     
 
 
@@ -344,17 +343,12 @@ while (p<epoch) {
         }
 
         
-       
-        
-
-
-//p=0;
     
         gradiant( max_cols,w,b,rate,range_max,range_min, train,max);
-    
+    p++;
 
 
-    if (p%(epoch / 100000) == 0 || p == 1 )
+    if (plot_speed!=0 &&  (p%plot_speed == 0 || p == 1) )
         {
             // Get live cost values
             if (currentX < NUM_VALUES) {
@@ -373,15 +367,16 @@ while (p<epoch) {
             //Draw graph function call
             drawgraph(values, p ,window, renderer);
 
+
+            printf("Epoch: %d\n", p);
+            printf("%lf \n",rmse(count,max_cols,w,b,train));
+
         }
         
 
 
 
 }
-
-
-
 
 
     // Cleanup and exit
@@ -392,6 +387,8 @@ while (p<epoch) {
 
 
 
+
+
     float *wb = (float*)malloc(max_cols*sizeof(int));
     for (int i =0; i<max_cols-1;i++)
     {
@@ -399,6 +396,7 @@ while (p<epoch) {
     }
     wb[max_cols-1]= b;
     printf("--\n");
+    
     return wb;
 
 
