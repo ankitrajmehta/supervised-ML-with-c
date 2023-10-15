@@ -86,7 +86,7 @@ double acc(int c,int max_cols,double w[max_cols - 1], float b, float test[c][max
     return (100-tmp*100);
 }
 
-void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double range_max, double range_min, float train[count][max_cols],double max[max_cols-1])
+double gradiant(int max_cols,double w[max_cols-1], double b,double rate,double range_max, double range_min, float train[count][max_cols],double max[max_cols-1])
 {
     int c = count;
     int x_vals = max_cols-1;
@@ -130,6 +130,11 @@ void gradiant(int max_cols,double w[max_cols-1], double b,double rate,double ran
     for (int i = 0; i<max_cols -1 ; i++){
         w[i] -= (dw[i]/count)*rate; //dw
     }
+
+    b -= (db/count) * rate;
+
+    return b;
+
 }
 
 void drawgraph(double values[NUM_VALUES], int p, SDL_Window* window, SDL_Renderer* renderer ){
@@ -158,7 +163,7 @@ void drawgraph(double values[NUM_VALUES], int p, SDL_Window* window, SDL_Rendere
         char epochText[20];
         char costText[20];
         snprintf(epochText, sizeof(epochText), "Epoch:%d",p);
-        snprintf(costText, sizeof(costText), "Cost: %lf", values[currentX - 1]);
+        snprintf(costText, sizeof(costText), "RMSE: %lf", values[currentX - 1]);
 
         SDL_Color textColor = {0, 0, 0, 255};
 
@@ -266,7 +271,7 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols],int 
     double range_min )
 {
     p=0;
-    int plot_speed =epoch / 100000;
+    int plot_speed =epoch / 1000;
     if (plot_speed<1)
     {
         plot_speed=1;
@@ -333,7 +338,7 @@ float* linear_regression_model(int c,int max_cols, float train[c][max_cols],int 
 min_find( c, max_cols,train,max);
 max_find( c, max_cols,train,max);
 
-while (p<epoch) {
+    while (p<epoch) {
         
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -344,11 +349,11 @@ while (p<epoch) {
 
         
     
-        gradiant( max_cols,w,b,rate,range_max,range_min, train,max);
-    p++;
+        b = gradiant( max_cols,w,b,rate,range_max,range_min, train,max);
+        p++;
 
 
-    if (plot_speed!=0 &&  (p%plot_speed == 0 || p == 1) )
+        if (plot_speed!=0 &&  (p%plot_speed == 0 || p == 1) )
         {
             // Get live cost values
             if (currentX < NUM_VALUES) {
@@ -376,7 +381,7 @@ while (p<epoch) {
 
 
 
-}
+    }   
 
 
     // Cleanup and exit
@@ -395,7 +400,7 @@ while (p<epoch) {
         wb[i] = w[i];
     }
     wb[max_cols-1]= b;
-    printf("--\n");
+    printf("--  %lf\n",b);
     
     return wb;
 

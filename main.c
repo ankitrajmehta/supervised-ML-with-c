@@ -72,8 +72,8 @@ int main()
     int max_cols = MAX_COLS;
 
 
-    int epoch=1000000;
-    double rate=1e-4;
+    int epoch=20000;
+    double rate=1e-3;
     double range_max=100000000000;
     double range_min=0 ;
     
@@ -100,8 +100,12 @@ for(int k=0; k<=TEST_ROWS; k++)
     }
     resultant+=b;
 
-    printf("result for %d = %lf \n",k, resultant);}
+    printf("result for %d = %lf with %f\n",k, resultant, test[k][1]);}
 
-    
+
+    double costt =  rmse(c,max_cols, w, b, test);
+    printf("RMSE = %lf",costt);
+
+
 
 }
